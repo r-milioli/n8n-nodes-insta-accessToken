@@ -1,0 +1,75 @@
+{
+  "name": "n8n-nodes-instagram-token",
+  "version": "2.0.1",
+  "description": "N8N nodes for Instagram API integration with access token authentication",
+  "keywords": [
+    "n8n-community-node-package",
+    "instagram",
+    "messaging",
+    "instagram-api",
+    "social-media",
+    "content-management",
+    "access-token",
+    "automatic-refresh",
+    "token-management"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/r-milioli/n8n-nodes-insta-accessToken#readme",
+  "author": {
+    "name": "Robson Milioli",
+    "email": "robsonmilioli@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/r-milioli/n8n-nodes-insta-accessToken.git"
+  },
+  "engines": {
+    "node": ">=20.15"
+  },
+  "main": "index.js",
+  "scripts": {
+    "build": "npx n8n-node build",
+    "build:watch": "tsc --watch",
+    "dev": "npx n8n-node dev",
+    "dev:manual": "npm run build && npm link && N8N_CUSTOM_EXTENSIONS=$(pwd) n8n start",
+    "link": "npm link",
+    "unlink": "npm unlink",
+    "format": "prettier nodes credentials --write",
+    "lint": "npx n8n-node lint",
+    "lintfix": "npx n8n-node lint --fix",
+    "test": "npx n8n-node test",
+    "release": "npx n8n-node release",
+    "prepublishOnly": "echo 'Skipping prerelease check'",
+    "publish:fork": "powershell -ExecutionPolicy Bypass -File scripts/publish-simple.ps1"
+  },
+  "files": [
+    "dist",
+    "CHANGELOG.md",
+    "AUTHENTICATION_GUIDE.md",
+    "API_REFERENCE.md",
+    "CONTRIBUTING.md"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "credentials": [
+      "dist/credentials/InstagramAccessTokenApi.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/Instagram/Instagram.node.js",
+      "dist/nodes/Instagram/InstagramTrigger.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@n8n/node-cli": "^0.13.0",
+    "@types/node": "^24.6.2",
+    "@typescript-eslint/parser": "~8.32.0",
+    "eslint": "^9.0.0",
+    "eslint-plugin-n8n-nodes-base": "^1.16.3",
+    "gulp": "^5.0.0",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.2"
+  },
+  "peerDependencies": {
+    "n8n-workflow": "*"
+  }
+}
