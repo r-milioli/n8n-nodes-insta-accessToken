@@ -67,9 +67,11 @@ export async function instagramApiRequest(
 	endpoint: string,
 	body: IDataObject = {},
 	qs: IDataObject = {},
+	config: { useAuthHeader?: boolean } = {},
 ): Promise<any> {
 	// Get valid access token with auto-detection (will auto-refresh if needed)
 	const accessToken = await getAccessTokenAuto.call(this);
+	const { useAuthHeader = false } = config;
 	
 	console.log('🌐 Instagram API Request:');
 	console.log('- Method:', method);
@@ -81,11 +83,17 @@ export async function instagramApiRequest(
 		body,
 		qs: {
 			...qs,
-			access_token: accessToken,
+			...(useAuthHeader ? {} : { access_token: accessToken }),
 		},
 		url: `https://graph.instagram.com/v23.0${endpoint}`,
 		json: true,
 	};
+
+	if (useAuthHeader) {
+		options.headers = {
+			Authorization: `Bearer ${accessToken}`,
+		};
+	}
 
 	try {
 		console.log('🚀 Making request to Instagram API...');

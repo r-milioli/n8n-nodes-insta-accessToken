@@ -112,6 +112,12 @@ export class Instagram implements INodeType {
 				action: 'Send a message with quick replies',
 			},
 			{
+				name: 'Send Private Reply',
+				value: 'sendPrivateReply',
+				description: 'Send a private reply to a comment',
+				action: 'Send a private reply message',
+			},
+			{
 				name: 'Send Text',
 				value: 'sendText',
 				description: 'Send a text message',
@@ -309,6 +315,37 @@ export class Instagram implements INodeType {
 				default: '',
 				placeholder: 'Hello from N8N!',
 				description: 'Text message to send (max 1000 characters)',
+			},
+
+			// ==================== Send Private Reply ====================
+			{
+				displayName: 'Comment ID',
+				name: 'commentId',
+				type: 'string',
+				required: true,
+				displayOptions: {
+					show: {
+						resource: ['message'],
+						operation: ['sendPrivateReply'],
+					},
+				},
+				default: '',
+				description: 'ID do comentário que receberá a resposta privada',
+			},
+			{
+				displayName: 'Message',
+				name: 'messageText',
+				type: 'string',
+				required: true,
+				displayOptions: {
+					show: {
+						resource: ['message'],
+						operation: ['sendPrivateReply'],
+					},
+				},
+				default: '',
+				placeholder: 'Obrigado pelo comentário!',
+				description: 'Resposta privada a ser enviada (máx. 1000 caracteres)',
 			},
 
 			// ==================== Send Image Message ====================
@@ -1900,6 +1937,27 @@ export class Instagram implements INodeType {
 						};
 
 						const responseData = await instagramApiRequest.call(this, 'POST', '/me/messages', body);
+						returnData.push({ json: responseData, pairedItem: { item: i } });
+					}
+
+					// ==================== Send Private Reply ====================
+					else if (operation === 'sendPrivateReply') {
+						const commentId = this.getNodeParameter('commentId', i) as string;
+						const messageText = this.getNodeParameter('messageText', i) as string;
+
+						const body = {
+							recipient: { comment_id: commentId },
+							message: { text: messageText },
+						};
+
+						const responseData = await instagramApiRequest.call(
+							this,
+							'POST',
+							'/me/messages',
+							body,
+							{},
+							{ useAuthHeader: true },
+						);
 						returnData.push({ json: responseData, pairedItem: { item: i } });
 					}
 
