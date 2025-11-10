@@ -47,6 +47,7 @@ This fork includes several enhancements over the original [n8n-nodes-instagram-i
 - **Audio Messages** - Send voice messages (AAC, M4A, WAV, MP4 formats)
 - **Video Messages** - Share video content
 - **Media Upload** - Upload and publish photos, videos, reels, and stories
+- **Private Replies** - Send private replies to commenters directly
 
 ### 💬 Interactive Templates
 - **Button Templates** - Up to 3 action buttons (web links or postbacks)
@@ -132,7 +133,12 @@ npm install n8n-nodes-instagram-token
 
 ---
 
-## 🆕 What's New in v2.0.1
+# What's New in 2.0.3
+
+- ✅ **Private Replies** - Send private replies to comments directly from the message node
+- ✅ **Authentication Updates** - Support `Authorization: Bearer` header for compatible API scenarios
+
+### v2.0.1 Highlights
 
 - ✅ **Comment Management** - Reply to comments automatically
 - ✅ **Access Token System** - Simplified authentication
