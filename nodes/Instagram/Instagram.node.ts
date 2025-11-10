@@ -118,6 +118,12 @@ export class Instagram implements INodeType {
 				action: 'Send a private reply message',
 			},
 			{
+				name: 'Send Private Reply (Quick Replies)',
+				value: 'sendPrivateReplyQuickReplies',
+				description: 'Send a private reply with quick reply options',
+				action: 'Send a private reply with quick replies',
+			},
+			{
 				name: 'Send Text',
 				value: 'sendText',
 				description: 'Send a text message',
@@ -326,7 +332,7 @@ export class Instagram implements INodeType {
 				displayOptions: {
 					show: {
 						resource: ['message'],
-						operation: ['sendPrivateReply'],
+						operation: ['sendPrivateReply', 'sendPrivateReplyQuickReplies'],
 					},
 				},
 				default: '',
@@ -340,12 +346,53 @@ export class Instagram implements INodeType {
 				displayOptions: {
 					show: {
 						resource: ['message'],
-						operation: ['sendPrivateReply'],
+						operation: ['sendPrivateReply', 'sendPrivateReplyQuickReplies'],
 					},
 				},
 				default: '',
 				placeholder: 'Obrigado pelo comentário!',
 				description: 'Resposta privada a ser enviada (máx. 1000 caracteres)',
+			},
+			{
+				displayName: 'Quick Replies',
+				name: 'quickReplies',
+				type: 'fixedCollection',
+				typeOptions: {
+					multipleValues: true,
+					maxValues: 13,
+				},
+				displayOptions: {
+					show: {
+						resource: ['message'],
+						operation: ['sendPrivateReplyQuickReplies'],
+					},
+				},
+				default: {},
+				placeholder: 'Add Quick Reply',
+				options: [
+					{
+						name: 'quickReply',
+						displayName: 'Quick Reply',
+						values: [
+							{
+								displayName: 'Title',
+								name: 'title',
+								type: 'string',
+								default: '',
+								placeholder: 'Option 1',
+								description: 'Quick reply title (max 20 characters)',
+							},
+							{
+								displayName: 'Payload',
+								name: 'payload',
+								type: 'string',
+								default: '',
+								placeholder: 'OPTION_1',
+								description: 'Payload sent back when clicked (max 1000 characters)',
+							},
+						],
+					},
+				],
 			},
 
 			// ==================== Send Image Message ====================
@@ -1948,6 +1995,43 @@ export class Instagram implements INodeType {
 						const body = {
 							recipient: { comment_id: commentId },
 							message: { text: messageText },
+						};
+
+						const responseData = await instagramApiRequest.call(
+							this,
+							'POST',
+							'/me/messages',
+							body,
+							{},
+							{ useAuthHeader: true },
+						);
+						returnData.push({ json: responseData, pairedItem: { item: i } });
+					}
+
+					// ==================== Send Private Reply (Quick Replies) ====================
+					else if (operation === 'sendPrivateReplyQuickReplies') {
+						const commentId = this.getNodeParameter('commentId', i) as string;
+						const messageText = this.getNodeParameter('messageText', i) as string;
+						const quickRepliesData = this.getNodeParameter('quickReplies', i) as any;
+
+						const quickReplies: IQuickReply[] = [];
+						if (quickRepliesData.quickReply && Array.isArray(quickRepliesData.quickReply)) {
+							for (const qr of quickRepliesData.quickReply) {
+								const quickReply: IQuickReply = {
+									content_type: 'text',
+									title: qr.title,
+									payload: qr.payload,
+								};
+								quickReplies.push(quickReply);
+							}
+						}
+
+						const body = {
+							recipient: { comment_id: commentId },
+							message: {
+								text: messageText,
+								quick_replies: quickReplies,
+							},
 						};
 
 						const responseData = await instagramApiRequest.call(
