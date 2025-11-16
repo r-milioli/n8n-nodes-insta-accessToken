@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-instagram-token",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "N8N nodes for Instagram API integration with access token authentication",
   "keywords": [
     "n8n-community-node-package",

@@ -215,6 +215,12 @@ export class Instagram implements INodeType {
 						description: 'Publish a media container',
 						action: 'Publish a post',
 					},
+					{
+						name: 'Get Container Status',
+						value: 'getContainerStatus',
+						description: 'Check processing status of a media container',
+						action: 'Get container status',
+					},
 				],
 				default: 'createSinglePost',
 			},
@@ -1466,12 +1472,12 @@ export class Instagram implements INodeType {
 				displayOptions: {
 					show: {
 						resource: ['post'],
-						operation: ['publishPost'],
+						operation: ['publishPost', 'getContainerStatus'],
 					},
 				},
 				default: '',
 				placeholder: '17895695668004550',
-				description: 'ID of the media container to publish (from create operation)',
+				description: 'ID of the media container (from create operation)',
 			},
 
 			// ==================== Story Operations ====================
@@ -2335,6 +2341,21 @@ export class Instagram implements INodeType {
 							'POST',
 							`/${igUserId}/media_publish`,
 							body,
+						);
+						returnData.push({ json: responseData, pairedItem: { item: i } });
+					}
+
+					// ==================== Get Container Status ====================
+					else if (operation === 'getContainerStatus') {
+						const creationId = this.getNodeParameter('creationId', i) as string;
+
+						const responseData = await instagramApiRequest.call(
+							this,
+							'GET',
+							`/${creationId}`,
+							{},
+							{ fields: 'status_code' },
+							{ useAuthHeader: true },
 						);
 						returnData.push({ json: responseData, pairedItem: { item: i } });
 					}
