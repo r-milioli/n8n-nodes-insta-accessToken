@@ -265,6 +265,18 @@ export class Instagram implements INodeType {
 						description: 'Reply to a comment on a post',
 						action: 'Reply to comment',
 					},
+					{
+						name: 'Hide/Unhide Comment',
+						value: 'hide',
+						description: 'Hide or unhide a comment on a post',
+						action: 'Hide/unhide comment',
+					},
+					{
+						name: 'Delete Comment',
+						value: 'delete',
+						description: 'Delete a comment on a post',
+						action: 'Delete comment',
+					},
 				],
 				default: 'reply',
 			},
@@ -1636,11 +1648,11 @@ export class Instagram implements INodeType {
 				displayOptions: {
 					show: {
 						resource: ['comment'],
-						operation: ['reply'],
+						operation: ['reply', 'hide', 'delete'],
 					},
 				},
 				default: '',
-				description: 'The ID of the comment to reply to',
+				description: 'The ID of the comment',
 			},
 			{
 				displayName: 'Message',
@@ -1655,6 +1667,20 @@ export class Instagram implements INodeType {
 				},
 				default: '',
 				description: 'The message to send as a reply',
+			},
+			{
+				displayName: 'Hide Comment',
+				name: 'hide',
+				type: 'boolean',
+				required: true,
+				displayOptions: {
+					show: {
+						resource: ['comment'],
+						operation: ['hide'],
+					},
+				},
+				default: true,
+				description: 'Whether to hide (true) or unhide (false) the comment',
 			},
 
 			// ==================== Get My Profile Fields ====================
@@ -2470,6 +2496,31 @@ export class Instagram implements INodeType {
 						const responseData = await instagramApiRequest.call(this, 'POST', `/${commentId}/replies`, {
 							message: message,
 						});
+
+						returnData.push({ json: responseData, pairedItem: { item: i } });
+					}
+
+					// ==================== Hide/Unhide Comment ====================
+					else if (operation === 'hide') {
+						const commentId = this.getNodeParameter('commentId', i) as string;
+						const hide = this.getNodeParameter('hide', i) as boolean;
+
+						const responseData = await instagramApiRequest.call(
+							this,
+							'POST',
+							`/${commentId}`,
+							{},
+							{ hide: hide.toString() },
+						);
+
+						returnData.push({ json: responseData, pairedItem: { item: i } });
+					}
+
+					// ==================== Delete Comment ====================
+					else if (operation === 'delete') {
+						const commentId = this.getNodeParameter('commentId', i) as string;
+
+						const responseData = await instagramApiRequest.call(this, 'DELETE', `/${commentId}`);
 
 						returnData.push({ json: responseData, pairedItem: { item: i } });
 					}

@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [2.4.2] - 2025-01-20
+
+### Changed
+- Updated README.md with new comment management features (Hide/Unhide and Delete)
+
+---
+
+## [2.4.1] - 2025-01-20
+
+---
+
+### Added
+- **New Comment Operations:**
+  - **Hide/Unhide Comment** - Hide or unhide a comment on a post (POST `/{commentId}?hide=true/false`)
+  - **Delete Comment** - Delete a comment on a post (DELETE `/{commentId}`)
+  - Both operations require the comment ID and proper access token permissions
+
+### Changed
+- Comment resource now supports 3 operations: Reply, Hide/Unhide, and Delete
+- Comment ID field updated to support all three comment operations
+
+---
+
 ## [1.5.5] - 2025-10-16
 
 ### Changed

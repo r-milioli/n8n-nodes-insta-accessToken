@@ -18,7 +18,7 @@ Professional N8N community nodes for Instagram API integration with **access tok
 This fork includes several enhancements over the original [n8n-nodes-instagram-integrations](https://www.npmjs.com/package/n8n-nodes-instagram-integrations):
 
 ### ✨ **New Features:**
-- **Comment Management** - Reply to comments automatically
+- **Comment Management** - Reply to comments automatically, hide/unhide, and delete comments
 - **Enhanced Token Management** - Automatic refresh with smart fallback
 - **Better Error Handling** - More detailed debugging and logs
 - **Format Validation** - Proper audio format support (AAC, M4A, WAV, MP4)
@@ -58,7 +58,7 @@ This fork includes several enhancements over the original [n8n-nodes-instagram-i
 - **Create Posts** - Single images, videos, and carousel posts
 - **Create Reels** - Short-form video content
 - **Create Stories** - Temporary 24-hour content
-- **Reply to Comments** - Automated comment responses
+- **Comment Management** - Reply to comments, hide/unhide comments, and delete comments
 
 ### 🔔 Webhook Events
 - **Message Events** - Incoming messages, postbacks, quick replies
@@ -133,7 +133,13 @@ npm install n8n-nodes-instagram-token
 
 ---
 
-# What's New in 2.2.0
+# What's New in 2.4.1
+
+- ✅ **Hide/Unhide Comments** - Hide or unhide comments on your posts
+- ✅ **Delete Comments** - Delete comments from your posts
+- ✅ **Enhanced Comment Management** - Complete control over comment moderation
+
+### v2.2.0 Highlights
 
 - ✅ **Private Replies** - Send private replies with plain text or quick replies directly from the message node
 - ✅ **Authentication Updates** - Support `Authorization: Bearer` header for compatible API scenarios
